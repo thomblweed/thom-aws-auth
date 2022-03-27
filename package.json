@@ -4,7 +4,8 @@
   "description": "lambda functions for aws auth with cognito",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node esbuild.build.js",
+    "ana": "esbuild --bundle login/loginHandler.ts --analyze"
   },
   "author": "Thomas Newman",
   "license": "ISC",
@@ -12,7 +13,9 @@
     "aws-sdk": "^2.1101.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.93",
     "@types/node": "^17.0.23",
+    "esbuild": "^0.14.28",
     "typescript": "^4.6.3"
   }
 }
