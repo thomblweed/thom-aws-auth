@@ -4,8 +4,7 @@
   "description": "lambda functions for aws auth with cognito",
   "main": "index.js",
   "scripts": {
-    "build": "node esbuild.build.js",
-    "ana": "esbuild --bundle login/loginHandler.ts --analyze"
+    "build": "node esbuild.build.js"
   },
   "author": "Thomas Newman",
   "license": "ISC",
