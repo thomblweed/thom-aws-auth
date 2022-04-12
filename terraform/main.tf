@@ -21,18 +21,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "random_pet" "lambda_bucket_name" {
-  prefix = "thom-auth-functions"
-  length = 4
-}
-
-resource "aws_s3_bucket" "lambda_auth_login_bucket" {
-  bucket = random_pet.lambda_bucket_name.id
-
-  acl           = "private"
-  force_destroy = true
-}
-
 data "archive_file" "login" {
   type = "zip"
 
@@ -40,11 +28,17 @@ data "archive_file" "login" {
   output_path = "../loginHandler.zip"
 }
 
+module "auth_bucket" {
+  source      = "./modules/auth-bucket"
+  bucket_name = "lambda-auth"
+}
+
 resource "aws_s3_bucket_object" "login_handler" {
-  bucket = aws_s3_bucket.lambda_auth_login_bucket.id
+  bucket = module.auth_bucket.lambda_auth_bucket
 
   key    = "loginHandler.zip"
   source = data.archive_file.login.output_path
 
-  etag = filemd5(data.archive_file.login.output_path)
+  etag       = filemd5(data.archive_file.login.output_path)
+  depends_on = [module.auth_bucket]
 }
