@@ -1,7 +1,7 @@
 require('esbuild')
   .build({
-    format: 'esm',
-    entryPoints: ['login/loginHandler.ts'],
+    format: 'cjs',
+    entryPoints: ['login/login.ts'],
     bundle: true,
     platform: 'node',
     target: ['node14.18.1'],

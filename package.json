@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node esbuild.build.js",
     "clean": "scripts/clean.sh",
-    "tf:apply": "cd terraform && terraform init && terraform apply -auto-approve",
+    "tf:apply": "npm run build && cd terraform && terraform init && terraform apply -auto-approve",
     "tf:destroy": "cd terraform && terraform destroy -auto-approve"
   },
   "author": "Thomas Newman",
