@@ -30,7 +30,7 @@ data "archive_file" "login" {
 
 module "auth_bucket" {
   source      = "./modules/auth-bucket"
-  bucket_name = "lambda-auth"
+  bucket_name = var.auth_bucket_name
 }
 
 resource "aws_s3_bucket_object" "login_handler" {
@@ -49,7 +49,7 @@ resource "aws_lambda_function" "login" {
   s3_bucket = module.auth_bucket.lambda_auth_bucket
   s3_key    = aws_s3_bucket_object.login_handler.key
 
-  runtime = "nodejs14.x"
+  runtime = var.node_runtime
   handler = "login.handler"
 
   source_code_hash = data.archive_file.login.output_base64sha256
