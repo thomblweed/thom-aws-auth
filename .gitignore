@@ -1,5 +1,6 @@
 node_modules
-login/*.js
+lambdas/*.js
+data
 
 *.tfstate*
 .terraform*

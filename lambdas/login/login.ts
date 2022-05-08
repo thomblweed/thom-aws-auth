@@ -3,7 +3,8 @@ import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ) => {
-  if (!event.body) {
+  const { body } = event;
+  if (!body) {
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -12,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (
     };
   }
 
-  const { username, password } = JSON.parse(event.body);
+  const { username, password } = JSON.parse(body);
 
   return {
     statusCode: 200,

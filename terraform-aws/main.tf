@@ -24,8 +24,8 @@ provider "aws" {
 data "archive_file" "login" {
   type = "zip"
 
-  source_file = "../login/login.js"
-  output_path = "../login/login.zip"
+  source_file = "../lambdas/login.js"
+  output_path = "../lambdas/login.zip"
 }
 
 module "auth_bucket" {
