@@ -24,8 +24,8 @@ provider "aws" {
 data "archive_file" "login" {
   type = "zip"
 
-  source_file = "../lambdas/login.js"
-  output_path = "../lambdas/login.zip"
+  source_file = "../../lambdas/login.js"
+  output_path = "../../lambdas/login.zip"
 }
 
 module "auth_bucket" {
@@ -43,6 +43,7 @@ resource "aws_s3_bucket_object" "login_handler" {
   depends_on = [module.auth_bucket]
 }
 
+# lambda functions
 resource "aws_lambda_function" "login" {
   function_name = "login"
 
@@ -63,6 +64,7 @@ resource "aws_cloudwatch_log_group" "login" {
   retention_in_days = 14
 }
 
+# IAM
 resource "aws_iam_role" "lambda_exec" {
   name = "serverless_lambda"
 
@@ -86,15 +88,15 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 }
 
 # api gateway
-resource "aws_apigatewayv2_api" "lambda" {
-  name          = "serverless_lambda_gw"
+resource "aws_apigatewayv2_api" "auth_api" {
+  name          = "serverless_auth"
   protocol_type = "HTTP"
 }
 
-resource "aws_apigatewayv2_stage" "lambda" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_apigatewayv2_stage" "auth_stage" {
+  api_id = aws_apigatewayv2_api.auth_api.id
 
-  name        = "serverless_lambda_stage"
+  name        = "auth"
   auto_deploy = true
 
   access_log_settings {
@@ -116,23 +118,23 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "login" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_apigatewayv2_integration" "auth_integration" {
+  api_id = aws_apigatewayv2_api.auth_api.id
 
   integration_uri    = aws_lambda_function.login.invoke_arn
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "hello_world" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_apigatewayv2_route" "gateway_login_route" {
+  api_id = aws_apigatewayv2_api.auth_api.id
 
   route_key = "POST /login"
-  target    = "integrations/${aws_apigatewayv2_integration.login.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.auth_integration.id}"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda.name}"
+  name = "/aws/api_gw/${aws_apigatewayv2_api.auth_api.name}"
 
   retention_in_days = 30
 }
@@ -143,5 +145,5 @@ resource "aws_lambda_permission" "api_gw" {
   function_name = aws_lambda_function.login.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+  source_arn = "${aws_apigatewayv2_api.auth_api.execution_arn}/*/*"
 }
