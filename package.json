@@ -10,7 +10,7 @@
     "destroy": "cd terraform/aws && terraform destroy -auto-approve && npm run clean",
     "up": "cd terraform/docker && terraform init && terraform apply -auto-approve",
     "down": "cd terraform/docker && terraform destroy -auto-approve",
-    "db-local-migrate": "scripts/createTableUsersAuth.sh && scripts/addAdminUser.sh"
+    "migrate": "scripts/migrateLocalDB.sh"
   },
   "author": "Thomas Newman",
   "license": "ISC",
