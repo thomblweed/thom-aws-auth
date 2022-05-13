@@ -1,7 +1,10 @@
-import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
+import type {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyHandlerV2
+} from 'aws-lambda';
 
-export const handler: APIGatewayProxyHandler = async (
-  event: APIGatewayProxyEvent
+export const handler: APIGatewayProxyHandlerV2 = async (
+  event: APIGatewayProxyEventV2
 ) => {
   const { body } = event;
   if (!body) {

@@ -121,9 +121,10 @@ resource "aws_apigatewayv2_stage" "auth_stage" {
 resource "aws_apigatewayv2_integration" "auth_integration" {
   api_id = aws_apigatewayv2_api.auth_api.id
 
-  integration_uri    = aws_lambda_function.login.invoke_arn
-  integration_type   = "AWS_PROXY"
-  integration_method = "POST"
+  integration_uri        = aws_lambda_function.login.invoke_arn
+  integration_type       = "AWS_PROXY"
+  integration_method     = "POST"
+  payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_route" "gateway_login_route" {
