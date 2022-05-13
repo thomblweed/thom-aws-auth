@@ -6,8 +6,10 @@
   "scripts": {
     "build": "node esbuild.build.js",
     "clean": "scripts/clean.sh",
-    "apply": "npm run build && cd terraform/aws && terraform init && terraform apply -auto-approve",
-    "destroy": "cd terraform/aws && terraform destroy -auto-approve",
+    "apply:aws": "npm run build && cd terraform/aws && terraform init && terraform apply -auto-approve",
+    "destroy:aws": "cd terraform/aws && terraform destroy -auto-approve",
+    "apply:local": "npm run build && cd terraform/localstack && terraform init && terraform apply -auto-approve",
+    "destroy:local": "cd terraform/localstack && terraform destroy -auto-approve",
     "up": "cd terraform/docker && terraform init && terraform apply -auto-approve",
     "down": "cd terraform/docker && terraform destroy -auto-approve",
     "migrate": "scripts/migrateLocalDB.sh"
