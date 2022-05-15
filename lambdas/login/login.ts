@@ -1,11 +1,11 @@
 import type {
   APIGatewayProxyEventV2,
-  APIGatewayProxyHandlerV2
+  APIGatewayProxyStructuredResultV2
 } from 'aws-lambda';
 
-export const handler: APIGatewayProxyHandlerV2 = async (
+export const handler = async (
   event: APIGatewayProxyEventV2
-) => {
+): Promise<APIGatewayProxyStructuredResultV2> => {
   const { body } = event;
   if (!body) {
     return {
@@ -16,11 +16,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (
     };
   }
 
-  const { username, password } = JSON.parse(body);
+  const { username } = JSON.parse(body);
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ username, password, token: '12345hello' }),
+    body: JSON.stringify({ username, token: '12345hello' }),
     headers: {
       'Content-Type': 'application/json'
     }
