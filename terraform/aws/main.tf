@@ -1,22 +1,21 @@
-data "archive_file" "login" {
-  type = "zip"
-
-  source_file = "../../lambdas/login.js"
-  output_path = "../../lambdas/login.zip"
-}
-
 module "auth_bucket" {
   source      = "./modules/bucket"
   bucket_name = var.auth_bucket_name
+}
+
+module "login_archive" {
+  source      = "./modules/archive-file"
+  source_file = "../../lambdas/login.js"
+  output_path = "../../lambdas/login.zip"
 }
 
 resource "aws_s3_bucket_object" "login_handler" {
   bucket = module.auth_bucket.s3_bucket_id
 
   key    = "login.zip"
-  source = data.archive_file.login.output_path
+  source = module.login_archive.output_path
 
-  etag       = filemd5(data.archive_file.login.output_path)
+  etag       = filemd5(module.login_archive.output_path)
   depends_on = [module.auth_bucket]
 }
 
@@ -30,7 +29,7 @@ resource "aws_lambda_function" "login" {
   runtime = var.node_runtime
   handler = "login.handler"
 
-  source_code_hash = data.archive_file.login.output_base64sha256
+  source_code_hash = module.login_archive.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
 }
