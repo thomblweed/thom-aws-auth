@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+if [ -d coverage ]; then
+    rm -rf coverage
+fi
+
 if [ -d terraform/aws/.terraform ]; then
     rm -rf terraform/aws/.terraform
 fi
