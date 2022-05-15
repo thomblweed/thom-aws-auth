@@ -1,12 +1,12 @@
 terraform {
-  required_version = ">= 1.1.7"
+  required_version = ">= 1.1.9"
 }
 
 resource "random_id" "bucket_id" {
   byte_length = 8
 }
 
-resource "aws_s3_bucket" "lambda_auth_bucket" {
+resource "aws_s3_bucket" "s3_bucket" {
   bucket = "${var.bucket_name}-${random_id.bucket_id.hex}"
 
   acl           = "private"

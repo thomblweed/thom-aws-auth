@@ -6,12 +6,12 @@ data "archive_file" "login" {
 }
 
 module "auth_bucket" {
-  source      = "./modules/auth-bucket"
+  source      = "./modules/bucket"
   bucket_name = var.auth_bucket_name
 }
 
 resource "aws_s3_bucket_object" "login_handler" {
-  bucket = module.auth_bucket.lambda_auth_bucket
+  bucket = module.auth_bucket.s3_bucket_id
 
   key    = "login.zip"
   source = data.archive_file.login.output_path
@@ -24,7 +24,7 @@ resource "aws_s3_bucket_object" "login_handler" {
 resource "aws_lambda_function" "login" {
   function_name = "login"
 
-  s3_bucket = module.auth_bucket.lambda_auth_bucket
+  s3_bucket = module.auth_bucket.s3_bucket_id
   s3_key    = aws_s3_bucket_object.login_handler.key
 
   runtime = var.node_runtime
