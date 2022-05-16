@@ -26,5 +26,5 @@ fi
 
 find terraform* -name '*.tfstate*' -type f -delete
 find terraform* -name '*.tfplan' -type f -delete
-find lambdas -name '*.js' -type f -delete
-find lambdas -name '*.zip' -type f -delete
+find src -name '*.js' -type f -delete
+find src -name '*.zip' -type f -delete

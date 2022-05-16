@@ -5,8 +5,8 @@ module "auth_bucket" {
 
 module "login_archive" {
   source      = "./modules/archive-file"
-  source_file = "../../lambdas/login.js"
-  output_path = "../../lambdas/login.zip"
+  source_file = "../../src/login.js"
+  output_path = "../../src/login.zip"
 }
 
 resource "aws_s3_bucket_object" "login_handler" {
