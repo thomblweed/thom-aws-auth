@@ -1,7 +1,8 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type {
   APIGatewayProxyEventV2,
-  APIGatewayProxyStructuredResultV2
+  APIGatewayProxyStructuredResultV2,
+  Context
 } from 'aws-lambda';
 
 import { handler } from './login';
@@ -16,6 +17,21 @@ const baseEvent = {
   isBase64Encoded: false
 };
 
+const baseContext: Context = {
+  callbackWaitsForEmptyEventLoop: false,
+  functionName: '',
+  functionVersion: '',
+  invokedFunctionArn: '',
+  memoryLimitInMB: '',
+  awsRequestId: '',
+  logGroupName: '',
+  logStreamName: '',
+  getRemainingTimeInMillis: vi.fn(),
+  done: vi.fn(),
+  fail: vi.fn(),
+  succeed: () => vi.fn()
+};
+
 describe('When a body is provided in the event', () => {
   let response: APIGatewayProxyStructuredResultV2;
   beforeAll(async () => {
@@ -26,7 +42,7 @@ describe('When a body is provided in the event', () => {
       }),
       ...baseEvent
     };
-    response = await handler(event);
+    response = await handler(event, baseContext);
   });
 
   it('should return 200 statusCode', () => {
@@ -41,19 +57,13 @@ describe('When a body is provided in the event', () => {
 });
 
 describe('When body is omitted from the event', () => {
-  let response: APIGatewayProxyStructuredResultV2;
-  beforeAll(async () => {
-    const event: APIGatewayProxyEventV2 = {
-      ...baseEvent
-    };
-    response = await handler(event);
-  });
+  const event: APIGatewayProxyEventV2 = {
+    ...baseEvent
+  };
 
-  it('should return 400 statusCode', () => {
-    expect(response.statusCode).toBe(400);
-  });
-
-  it('should return correct body', async () => {
-    expect(response.body).toEqual(JSON.stringify({ error: 'No body found' }));
+  it('should throw a validation error', async () => {
+    await expect(handler(event, baseContext)).rejects.toThrowError(
+      'Event object failed validation'
+    );
   });
 });

@@ -1,0 +1,15 @@
+{
+  "name": "auth-layers",
+  "version": "1.0.0",
+  "description": "layers for auth lambdas",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Newman",
+  "license": "ISC",
+  "dependencies": {
+    "@middy/core": "^3.0.3",
+    "@middy/validator": "^3.0.3"
+  }
+}
