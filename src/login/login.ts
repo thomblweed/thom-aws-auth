@@ -9,16 +9,6 @@ const login = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   const { body } = event;
-
-  // if (!body) {
-  //   return {
-  //     statusCode: 400,
-  //     body: JSON.stringify({
-  //       error: 'No body found'
-  //     })
-  //   };
-  // }
-
   const { username } = JSON.parse(body!);
 
   return {
@@ -38,7 +28,6 @@ handler.use(
       type: 'object',
       required: ['body'],
       properties: {
-        // this will pass validation
         body: {
           type: 'string'
         }

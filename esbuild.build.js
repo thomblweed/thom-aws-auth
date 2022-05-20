@@ -5,7 +5,7 @@ require('esbuild')
     bundle: true,
     platform: 'node',
     target: ['node14.18.1'],
-    outdir: 'src',
+    outdir: 'dist',
     tsconfig: 'tsconfig.json'
   })
   .catch(() => process.exit(1));

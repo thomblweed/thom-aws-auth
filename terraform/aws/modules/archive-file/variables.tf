@@ -6,4 +6,10 @@ variable "source_file" {
 variable "output_path" {
   description = "path to the output file"
   type        = string
+  nullable    = false
+}
+
+variable "source_directory" {
+  description = "path to the source directory"
+  type        = string
 }
