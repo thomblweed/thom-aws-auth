@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@middy/core": "^3.0.3",
+    "@middy/http-header-normalizer": "^3.0.3",
+    "@middy/http-json-body-parser": "^3.0.3",
     "@middy/validator": "^3.0.3"
   }
 }

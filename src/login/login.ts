@@ -1,15 +1,28 @@
 import type {
   APIGatewayProxyEventV2,
-  APIGatewayProxyStructuredResultV2
+  APIGatewayProxyStructuredResultV2,
+  Handler
 } from 'aws-lambda';
 import middy from '@middy/core';
 import validator from '@middy/validator';
+import httpHeaderNormalizer from '@middy/http-header-normalizer';
+import httpJsonBodyParser from '@middy/http-json-body-parser';
 
-const login = async (
-  event: APIGatewayProxyEventV2
+type ProxyHandler = Handler<
+  APIGatewayProxyEventV2,
+  APIGatewayProxyStructuredResultV2
+>;
+
+type Credentials = {
+  username: string;
+  password: string;
+};
+
+const login: ProxyHandler = async (
+  event
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   const { body } = event;
-  const { username } = JSON.parse(body!);
+  const { username } = body as unknown as Credentials;
 
   return {
     statusCode: 200,
@@ -22,16 +35,19 @@ const login = async (
 
 export const handler = middy(login);
 
-handler.use(
-  validator({
-    inputSchema: {
-      type: 'object',
-      required: ['body'],
-      properties: {
-        body: {
-          type: 'string'
+handler
+  .use(
+    validator({
+      inputSchema: {
+        type: 'object',
+        required: ['body'],
+        properties: {
+          body: {
+            type: 'string'
+          }
         }
       }
-    }
-  })
-);
+    })
+  )
+  .use(httpHeaderNormalizer())
+  .use(httpJsonBodyParser());

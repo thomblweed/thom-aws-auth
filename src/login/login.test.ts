@@ -12,7 +12,9 @@ const baseEvent = {
   routeKey: '',
   rawPath: '',
   rawQueryString: '',
-  headers: {},
+  headers: {
+    'Content-Type': 'application/json'
+  },
   requestContext: {} as any,
   isBase64Encoded: false
 };
@@ -37,8 +39,8 @@ describe('When a body is provided in the event', () => {
   beforeAll(async () => {
     const event: APIGatewayProxyEventV2 = {
       body: JSON.stringify({
-        username: 'test',
-        password: 'test'
+        username: 'test@testing.com',
+        password: 'password-test'
       }),
       ...baseEvent
     };
@@ -51,7 +53,7 @@ describe('When a body is provided in the event', () => {
 
   it('should return correct body', async () => {
     expect(response.body).toEqual(
-      JSON.stringify({ username: 'test', token: '12345hello' })
+      JSON.stringify({ username: 'test@testing.com', token: '12345hello' })
     );
   });
 });

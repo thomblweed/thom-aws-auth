@@ -17,6 +17,20 @@ export default defineConfig({
           __dirname,
           'src/layers/nodejs/node_modules/@middy/validator'
         )
+      },
+      {
+        find: '@middy/http-header-normalizer',
+        replacement: resolve(
+          __dirname,
+          'src/layers/nodejs/node_modules/@middy/http-header-normalizer'
+        )
+      },
+      {
+        find: '@middy/http-json-body-parser',
+        replacement: resolve(
+          __dirname,
+          'src/layers/nodejs/node_modules/@middy/http-json-body-parser'
+        )
       }
     ]
   }
