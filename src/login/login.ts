@@ -1,22 +1,11 @@
-import type {
-  APIGatewayProxyEventV2,
-  APIGatewayProxyStructuredResultV2,
-  Handler
-} from 'aws-lambda';
+import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import middy from '@middy/core';
 import validator from '@middy/validator';
 import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import httpJsonBodyParser from '@middy/http-json-body-parser';
 
-type ProxyHandler = Handler<
-  APIGatewayProxyEventV2,
-  APIGatewayProxyStructuredResultV2
->;
-
-type Credentials = {
-  username: string;
-  password: string;
-};
+import { loginValidationSchema } from './schema/validation.schema';
+import { Credentials, ProxyHandler } from './types';
 
 const login: ProxyHandler = async (
   event
@@ -36,18 +25,6 @@ const login: ProxyHandler = async (
 export const handler = middy(login);
 
 handler
-  .use(
-    validator({
-      inputSchema: {
-        type: 'object',
-        required: ['body'],
-        properties: {
-          body: {
-            type: 'string'
-          }
-        }
-      }
-    })
-  )
+  .use(validator(loginValidationSchema))
   .use(httpHeaderNormalizer())
   .use(httpJsonBodyParser());
