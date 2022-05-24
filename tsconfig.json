@@ -20,6 +20,5 @@
       "/opt/nodejs/*": ["./src/layers/nodejs/*"],
       "@middy/*": ["./src/layers/nodejs/node_modules/@middy/*"]
     }
-  },
-  "exclude": ["node_modules"]
+  }
 }

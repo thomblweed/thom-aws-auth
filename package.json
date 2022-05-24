@@ -4,6 +4,7 @@
   "description": "lambda functions for auth with dynamodb",
   "main": "index.js",
   "scripts": {
+    "setup": "npm i && cd src/layers/nodejs && npm i",
     "build": "node esbuild.build.js",
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -19,14 +20,14 @@
   "author": "Thomas Newman",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1113.0"
+    "aws-sdk": "^2.1141.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.93",
-    "@types/node": "^17.0.23",
-    "c8": "^7.11.2",
-    "esbuild": "^0.14.36",
-    "typescript": "^4.6.3",
-    "vitest": "^0.12.6"
+    "@types/aws-lambda": "^8.10.97",
+    "@types/node": "^17.0.35",
+    "c8": "^7.11.3",
+    "esbuild": "^0.14.39",
+    "typescript": "^4.6.4",
+    "vitest": "^0.12.9"
   }
 }
