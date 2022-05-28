@@ -2,7 +2,6 @@
   "name": "thom-aws-auth",
   "version": "0.0.1",
   "description": "lambda functions for auth with dynamodb",
-  "main": "index.js",
   "scripts": {
     "setup": "npm i && cd src/layers/nodejs && npm i",
     "build": "node esbuild.build.js",
@@ -20,6 +19,7 @@
   "author": "Thomas Newman",
   "license": "ISC",
   "dependencies": {
+    "amazon-cognito-identity-js": "^5.2.9",
     "aws-sdk": "^2.1141.0"
   },
   "devDependencies": {
