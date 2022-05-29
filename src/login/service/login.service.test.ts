@@ -7,7 +7,7 @@ import {
 } from 'amazon-cognito-identity-js';
 import * as CognitoIdentity from 'amazon-cognito-identity-js';
 
-import { login } from './auth.service';
+import { login } from './login.service';
 
 describe('When authenticateUser is successful', () => {
   let response: string;
