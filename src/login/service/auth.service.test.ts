@@ -26,7 +26,7 @@ describe('When authenticateUser is successful', () => {
           })
         };
         const cachedSession = new CognitoUserSession(sessionData);
-        callbacks.onSuccess(cachedSession);
+        return callbacks.onSuccess(cachedSession);
       }
     );
     response = await login('username', 'password');
@@ -34,5 +34,21 @@ describe('When authenticateUser is successful', () => {
 
   it('should return access token', () => {
     expect(response).toBe('accessToken');
+  });
+});
+
+describe('When authenticateUser fails', () => {
+  beforeEach(async () => {
+    CognitoIdentity.CognitoUser.prototype.authenticateUser = vi.fn(
+      (authDetails, callbacks) => {
+        return callbacks.onFailure(new Error('things happened'));
+      }
+    );
+  });
+
+  it('should throw an error', async () => {
+    await expect(login('username', 'password')).rejects.toThrowError(
+      'things happened'
+    );
   });
 });
