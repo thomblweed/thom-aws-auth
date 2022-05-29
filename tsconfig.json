@@ -15,7 +15,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true
-  },
-  "exclude": ["node_modules"]
+    "allowJs": true,
+    "paths": {
+      "/opt/nodejs/*": ["./src/layers/nodejs/*"],
+      "@middy/*": ["./src/layers/nodejs/node_modules/@middy/*"]
+    }
+  }
 }

@@ -1,5 +1,6 @@
 node_modules
-lambdas/*.js
+dist
+src/*.js
 coverage
 data
 *.zip

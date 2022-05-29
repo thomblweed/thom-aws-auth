@@ -4,9 +4,36 @@ module "auth_bucket" {
 }
 
 module "login_archive" {
-  source      = "./modules/archive-file"
-  source_file = "../../lambdas/login.js"
-  output_path = "../../lambdas/login.zip"
+  source           = "./modules/archive-file"
+  source_file      = "../../dist/login.js"
+  output_path      = "../../dist/login.zip"
+  source_directory = null
+}
+
+module "layers_archive" {
+  source           = "./modules/archive-file"
+  source_file      = null
+  output_path      = "../../dist/layers.zip"
+  source_directory = "../../src/layers/nodejs"
+}
+
+resource "null_resource" "npm_install" {
+  provisioner "local-exec" {
+    working_dir = "../../src/layers/nodejs"
+    command     = "npm install"
+  }
+
+  triggers = {
+    rerun_every_time = "${uuid()}"
+  }
+}
+
+resource "aws_lambda_layer_version" "lambda_layer" {
+  layer_name          = "auth_layers"
+  filename            = "../../dist/layers.zip"
+  source_code_hash    = module.layers_archive.output_base64sha256
+  compatible_runtimes = [var.node_runtime]
+  depends_on          = [null_resource.npm_install]
 }
 
 resource "aws_s3_bucket_object" "login_handler" {
@@ -28,6 +55,8 @@ resource "aws_lambda_function" "login" {
 
   runtime = var.node_runtime
   handler = "login.handler"
+
+  layers = [aws_lambda_layer_version.lambda_layer.arn]
 
   source_code_hash = module.login_archive.output_base64sha256
 

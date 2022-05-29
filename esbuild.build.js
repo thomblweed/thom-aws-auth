@@ -1,11 +1,11 @@
 require('esbuild')
   .build({
     format: 'cjs',
-    entryPoints: ['lambdas/login/login.ts'],
+    entryPoints: ['src/login/login.ts'],
     bundle: true,
     platform: 'node',
     target: ['node14.18.1'],
-    outdir: 'lambdas',
+    outdir: 'dist',
     tsconfig: 'tsconfig.json'
   })
   .catch(() => process.exit(1));

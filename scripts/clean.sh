@@ -4,6 +4,10 @@ if [ -d coverage ]; then
     rm -rf coverage
 fi
 
+if [ -d dist ]; then
+    rm -rf dist
+fi
+
 if [ -d terraform/aws/.terraform ]; then
     rm -rf terraform/aws/.terraform
 fi
@@ -26,5 +30,3 @@ fi
 
 find terraform* -name '*.tfstate*' -type f -delete
 find terraform* -name '*.tfplan' -type f -delete
-find lambdas -name '*.js' -type f -delete
-find lambdas -name '*.zip' -type f -delete
