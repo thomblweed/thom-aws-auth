@@ -25,6 +25,6 @@ const login: ProxyHandler = async (
 export const handler = middy(login);
 
 handler
+  .use(httpJsonBodyParser())
   .use(validator(loginValidationSchema))
-  .use(httpHeaderNormalizer())
-  .use(httpJsonBodyParser());
+  .use(httpHeaderNormalizer());
