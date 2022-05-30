@@ -17,11 +17,19 @@ resource "docker_image" "localstack" {
 resource "docker_container" "localstack" {
   image = docker_image.localstack.name
   name  = "localstack"
-  env   = ["SERVICES=lambda,s3,apigatewayv2", "DOCKER_HOST=unix:///var/run/docker.sock", "DEFAULT_REGION=eu-west-2", "DATA_DIR=/tmp/localstack/data"]
+  env   = ["SERVICES=lambda,s3,cloudwatch,iam", "DOCKER_HOST=unix:///var/run/docker.sock", "DEFAULT_REGION=eu-west-2", "DATA_DIR=/tmp/localstack/data", "LAMBDA_EXECUTOR=docker", "HOSTNAME_EXTERNAL=localstack"]
 
   ports {
     internal = 4566
     external = 4566
+  }
+  ports {
+    internal = 4574
+    external = 4574
+  }
+  ports {
+    internal = 4572
+    external = 4572
   }
 
   volumes {
