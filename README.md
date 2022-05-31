@@ -23,8 +23,8 @@ Installations and setup of the following:
 
 I'm using https://localstack.cloud/ for running my lambdas locally and for testing. However, I do not have the pro license required to locally run the AWS services Cognito, Lambda Layers and Gateway V2.
 
-I have come up with a bit of a hack to merge the Layers and Lambas in a single package to deploy to the localstack container. It's not a nice approach but it does save me having to spend money.
-The other tade off, of course, is I don't get to run "integration" tests with the Gateway service.
+I have come up with a bit of a hack to merge the Layers and Lambas in a single package to deploy to the localstack container. It's not a nice approach but it works for now.
+The other tade off, of course, is I don't get to run integration tests with the Gateway service.
 
 To run with docker, I am using Terraform for spinning up the docker container as well as the localstack setup for the AWS services.
 
