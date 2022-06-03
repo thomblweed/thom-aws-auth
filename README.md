@@ -16,8 +16,10 @@ Installations and setup of the following:
 
 ### Setup
 
-- `npm install`
-- `npm run setup`
+```
+npm install
+npm run setup
+```
 
 ### Run with Docker
 
@@ -35,5 +37,52 @@ To run with docker, I am using Terraform for spinning up the docker container as
 
 ### Tear down
 
-- `npm run destroy:local` - destroy the localstack services from the localsatck container
+- `npm run destroy:local` - destroy the localstack services from the localstack container
 - `npm run down` - tear down the localstack docker container
+
+## Deployment
+
+To deploy the AWS services I am using Terraform as per the tf files at location `terraform/aws`. This process will be moved to a pipeline eventually.
+
+I have added a user to the Cognito user pool and so setting up a secrets tfvars file for the values alongside values for the Cognito env vars.
+
+Change to the terraform directory for aws.
+
+```
+cd terraform/aws
+```
+
+#### Initialise Terraform and create secrets file
+
+```
+terraform init
+touch secrets.tfvars
+```
+
+#### Add the following to secrets.tfvars file with applicable values:
+
+```
+thom_username = "<username value goes here>"
+thom_email = "<email value goes here>"
+thom_password = "<password value goes here>"
+user_pool_id = "<user pool id goes here>"
+client_id = "<client id goes here>"
+```
+
+#### Validate Terraform
+
+```
+terraform validate
+```
+
+If all is good, plan the changes
+
+```
+terraform plan -out=out.tfplan -var-file=secrets.tfvars
+```
+
+#### Deploy to AWS
+
+```
+terraform apply "out.tfplan"
+```
