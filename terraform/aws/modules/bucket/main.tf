@@ -9,6 +9,10 @@ resource "random_id" "bucket_id" {
 resource "aws_s3_bucket" "s3_bucket" {
   bucket = "${var.bucket_name}-${random_id.bucket_id.hex}"
 
-  acl           = "private"
   force_destroy = true
+}
+
+resource "aws_s3_bucket_acl" "bucket_acl" {
+  bucket = aws_s3_bucket.s3_bucket.id
+  acl    = "private"
 }

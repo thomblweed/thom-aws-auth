@@ -36,7 +36,7 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   depends_on          = [null_resource.npm_install]
 }
 
-resource "aws_s3_bucket_object" "login_handler" {
+resource "aws_s3_object" "login_handler" {
   bucket = module.auth_bucket.s3_bucket_id
 
   key    = "login.zip"
@@ -51,7 +51,7 @@ resource "aws_lambda_function" "login" {
   function_name = "login"
 
   s3_bucket = module.auth_bucket.s3_bucket_id
-  s3_key    = aws_s3_bucket_object.login_handler.key
+  s3_key    = aws_s3_object.login_handler.key
 
   runtime = var.node_runtime
   handler = "login.handler"

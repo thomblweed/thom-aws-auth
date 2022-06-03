@@ -7,7 +7,7 @@ import {
 } from 'amazon-cognito-identity-js';
 import * as CognitoIdentity from 'amazon-cognito-identity-js';
 
-import { login } from './login.service';
+import { authenticate } from './cognito.service';
 
 describe('When authenticateUser is successful', () => {
   let response: string;
@@ -29,7 +29,7 @@ describe('When authenticateUser is successful', () => {
         return callbacks.onSuccess(cachedSession);
       }
     );
-    response = await login('username', 'password');
+    response = await authenticate('username', 'password');
   });
 
   it('should return access token', () => {
@@ -47,7 +47,7 @@ describe('When authenticateUser fails', () => {
   });
 
   it('should throw an error', async () => {
-    await expect(login('username', 'password')).rejects.toThrowError(
+    await expect(authenticate('username', 'password')).rejects.toThrowError(
       'things happened'
     );
   });
