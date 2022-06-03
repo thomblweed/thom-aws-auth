@@ -51,7 +51,7 @@ describe('When a body is provided in the event', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('should return correct body', async () => {
+  it('should return correct body value as json', async () => {
     expect(response.body).toEqual(
       JSON.stringify({ username: 'test@testing.com', token: '12345hello' })
     );
@@ -64,6 +64,36 @@ describe('When body is omitted from the event', () => {
   };
 
   it('should throw a validation error', async () => {
+    await expect(handler(event, baseContext)).rejects.toThrowError(
+      'Invalid or malformed JSON was provided'
+    );
+  });
+});
+
+describe('When username is omitted from the body', () => {
+  const event: APIGatewayProxyEventV2 = {
+    body: JSON.stringify({
+      password: 'password-test'
+    }),
+    ...baseEvent
+  };
+
+  it('should throw an object failed error', async () => {
+    await expect(handler(event, baseContext)).rejects.toThrowError(
+      'Event object failed validation'
+    );
+  });
+});
+
+describe('When password is omitted from the body', () => {
+  const event: APIGatewayProxyEventV2 = {
+    body: JSON.stringify({
+      username: 'test@testing.com'
+    }),
+    ...baseEvent
+  };
+
+  it('should throw an object failed error', async () => {
     await expect(handler(event, baseContext)).rejects.toThrowError(
       'Event object failed validation'
     );

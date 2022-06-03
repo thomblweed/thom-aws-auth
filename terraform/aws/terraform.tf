@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.1.9"
+  required_version = "1.2.1"
 
   backend "s3" {
     bucket               = "thom-terraform-backend"
@@ -12,7 +12,7 @@ terraform {
 
   required_providers {
     aws = {
-      version = "~> 3.73.0"
+      version = "~> 4.17.0"
       source  = "hashicorp/aws"
     }
     random = {

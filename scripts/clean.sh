@@ -4,6 +4,10 @@ if [ -d coverage ]; then
     rm -rf coverage
 fi
 
+if [ -d temp ]; then
+    rm -rf temp
+fi
+
 if [ -d dist ]; then
     rm -rf dist
 fi

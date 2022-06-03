@@ -10,7 +10,10 @@ const userPool: CognitoUserPool = new CognitoUserPool({
   ClientId: 'dasdasds'
 });
 
-export const login = (username: string, password: string): Promise<string> => {
+export const authenticate = (
+  username: string,
+  password: string
+): Promise<string> => {
   const cognitoUser = new CognitoUser({
     Username: username,
     Pool: userPool
