@@ -62,6 +62,8 @@ resource "aws_lambda_function" "login" {
 
   role = aws_iam_role.lambda_exec.arn
 
+  timeout = 8
+
   environment {
     variables = {
       USER_POOL_ID = var.user_pool_id,

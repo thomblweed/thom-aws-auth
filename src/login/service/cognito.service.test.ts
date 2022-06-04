@@ -4,7 +4,6 @@ import {
   beforeEach,
   it,
   expect,
-  SpyInstance,
   beforeAll,
   afterAll
 } from 'vitest';
@@ -20,10 +19,10 @@ import { authenticate } from './cognito.service';
 
 const OLD_ENV = process.env;
 
-// beforeAll(() => {
-//   process.env.USER_POOL_ID = 'iqq48NugLtbvFn2bYs-uns_kvQOK4Zm1aWPKsT9';
-//   process.env.CLIENT_ID = 'dasdasds';
-// });
+beforeAll(() => {
+  process.env.USER_POOL_ID = 'iqq48NugLtbvFn2bYs-uns_kvQOK4Zm1aWPKsT9';
+  process.env.CLIENT_ID = 'dasdasds';
+});
 
 afterAll(() => {
   process.env = OLD_ENV;
@@ -32,8 +31,6 @@ afterAll(() => {
 describe('When authenticateUser is successful', () => {
   let response: string;
   beforeEach(async () => {
-    process.env.USER_POOL_ID = 'iqq48NugLtbvFn2bYs-uns_kvQOK4Zm1aWPKsT9';
-    process.env.CLIENT_ID = 'dasdasds';
     CognitoIdentity.CognitoUser.prototype.authenticateUser = vi.fn(
       (authDetails, callbacks) => {
         const sessionData = {
@@ -61,8 +58,6 @@ describe('When authenticateUser is successful', () => {
 
 describe('When authenticateUser fails', () => {
   beforeEach(async () => {
-    process.env.USER_POOL_ID = 'iqq48NugLtbvFn2bYs-uns_kvQOK4Zm1aWPKsT9';
-    process.env.CLIENT_ID = 'dasdasds';
     CognitoIdentity.CognitoUser.prototype.authenticateUser = vi.fn(
       (authDetails, callbacks) => {
         return callbacks.onFailure(new Error('things happened'));

@@ -14,8 +14,6 @@ export const authenticate = (
   username: string,
   password: string
 ): Promise<string> => {
-  console.log('process.env.USER_POOL_ID', process.env.USER_POOL_ID);
-  console.log('process.env.CLIENT_ID', process.env.CLIENT_ID);
   const cognitoUser = new CognitoUser({
     Username: username,
     Pool: userPool
