@@ -17,17 +17,6 @@ import * as CognitoIdentity from 'amazon-cognito-identity-js';
 
 import { authenticate } from './cognito.service';
 
-const OLD_ENV = process.env;
-
-beforeAll(() => {
-  process.env.USER_POOL_ID = 'iqq48NugLtbvFn2bYs-uns_kvQOK4Zm1aWPKsT9';
-  process.env.CLIENT_ID = 'dasdasds';
-});
-
-afterAll(() => {
-  process.env = OLD_ENV;
-});
-
 describe('When authenticateUser is successful', () => {
   let response: string;
   beforeEach(async () => {

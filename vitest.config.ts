@@ -3,6 +3,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    setupFiles: ['testSetup.ts'],
     exclude: [...configDefaults.exclude, 'temp']
   },
   resolve: {
