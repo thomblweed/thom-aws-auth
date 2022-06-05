@@ -1,4 +1,13 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi
+} from 'vitest';
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyStructuredResultV2,
@@ -39,7 +48,7 @@ const baseContext: Context = {
 
 describe('When a body is provided in the event', () => {
   let event: APIGatewayProxyEventV2;
-  beforeAll(async () => {
+  beforeEach(async () => {
     event = {
       body: JSON.stringify({
         username: 'test@testing.com',
@@ -51,11 +60,11 @@ describe('When a body is provided in the event', () => {
 
   describe('And the authentication is successful', () => {
     let response: APIGatewayProxyStructuredResultV2;
-    beforeAll(async () => {
+    beforeEach(async () => {
       spyAuthenticate.mockResolvedValue('jwtToken');
       response = await handler(event, baseContext);
     });
-    afterAll(() => {
+    afterEach(() => {
       vi.clearAllMocks();
     });
 
@@ -72,9 +81,12 @@ describe('When a body is provided in the event', () => {
 
   describe('And the authentication fails', () => {
     let response: APIGatewayProxyStructuredResultV2;
-    beforeAll(async () => {
+    beforeEach(async () => {
       spyAuthenticate.mockRejectedValue('error happened');
       response = await handler(event, baseContext);
+    });
+    afterEach(() => {
+      vi.clearAllMocks();
     });
 
     it('should return 401 statusCode', () => {
