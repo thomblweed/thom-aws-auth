@@ -1,4 +1,12 @@
-import { vi, describe, beforeEach, it, expect, SpyInstance } from 'vitest';
+import {
+  vi,
+  describe,
+  beforeEach,
+  it,
+  expect,
+  beforeAll,
+  afterAll
+} from 'vitest';
 import {
   CognitoAccessToken,
   CognitoIdToken,

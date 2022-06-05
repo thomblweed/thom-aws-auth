@@ -1,11 +1,23 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi
+} from 'vitest';
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyStructuredResultV2,
   Context
 } from 'aws-lambda';
 
+import * as CognitoService from './service/cognito.service';
 import { handler } from './login';
+
+const spyAuthenticate = vi.spyOn(CognitoService, 'authenticate');
 
 const baseEvent = {
   version: '',
@@ -35,26 +47,51 @@ const baseContext: Context = {
 };
 
 describe('When a body is provided in the event', () => {
-  let response: APIGatewayProxyStructuredResultV2;
-  beforeAll(async () => {
-    const event: APIGatewayProxyEventV2 = {
+  let event: APIGatewayProxyEventV2;
+  beforeEach(async () => {
+    event = {
       body: JSON.stringify({
         username: 'test@testing.com',
         password: 'password-test'
       }),
       ...baseEvent
     };
-    response = await handler(event, baseContext);
   });
 
-  it('should return 200 statusCode', () => {
-    expect(response.statusCode).toBe(200);
+  describe('And the authentication is successful', () => {
+    let response: APIGatewayProxyStructuredResultV2;
+    beforeEach(async () => {
+      spyAuthenticate.mockResolvedValue('jwtToken');
+      response = await handler(event, baseContext);
+    });
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should return 200 statusCode', () => {
+      expect(response.statusCode).toBe(200);
+    });
+
+    it('should return correct body value as json', async () => {
+      expect(response.body).toEqual(
+        JSON.stringify({ username: 'test@testing.com' })
+      );
+    });
   });
 
-  it('should return correct body value as json', async () => {
-    expect(response.body).toEqual(
-      JSON.stringify({ username: 'test@testing.com', token: '12345hello' })
-    );
+  describe('And the authentication fails', () => {
+    let response: APIGatewayProxyStructuredResultV2;
+    beforeEach(async () => {
+      spyAuthenticate.mockRejectedValue('error happened');
+      response = await handler(event, baseContext);
+    });
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should return 401 statusCode', () => {
+      expect(response.statusCode).toBe(401);
+    });
   });
 });
 

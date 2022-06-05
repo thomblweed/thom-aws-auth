@@ -8,7 +8,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "clean": "scripts/clean.sh",
-    "apply:aws": "npm run build && cd terraform/aws && terraform apply -auto-approve",
+    "apply:aws": "npm run build && cd terraform/aws && terraform plan -out=out.tfplan -var-file=secrets.tfvars && terraform apply \"out.tfplan\"",
     "destroy:aws": "cd terraform/aws && terraform destroy -auto-approve",
     "apply:local": "npm run build && cd terraform/localstack && terraform init && terraform apply -auto-approve",
     "update:local": "npm run create:local-lambdas && cd terraform/localstack && terraform apply -auto-approve",
