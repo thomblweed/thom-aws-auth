@@ -32,6 +32,13 @@ resource "aws_lambda_function" "login" {
   source_code_hash = module.login_archive.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+
+  environment {
+    variables = {
+      USER_POOL_ID = var.user_pool_id,
+      CLIENT_ID    = var.client_id
+    }
+  }
 }
 
 resource "aws_iam_role" "lambda_exec" {
