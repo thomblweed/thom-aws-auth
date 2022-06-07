@@ -14,9 +14,9 @@ const logout: Handler<
     statusCode: 200,
     body: JSON.stringify({}),
     headers: {
-      'Content-Type': 'application/json',
-      Cookie: ''
-    }
+      'Content-Type': 'application/json'
+    },
+    cookies: [`thom-auth=null; Expires=Thu, 01 Jan 1970 00:00:00 GMT`]
   };
 };
 
