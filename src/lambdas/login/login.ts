@@ -26,9 +26,9 @@ const login: Handler<
       body: JSON.stringify({ username }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': true,
-        'Set-Cookie': `jwtToken=${jwtToken}`
-      }
+        'Access-Control-Allow-Credentials': true
+      },
+      cookies: [`thom-auth=${jwtToken}; Secure; HttpOnly`]
     };
   } catch (error) {
     console.error(error);

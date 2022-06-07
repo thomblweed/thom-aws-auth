@@ -61,7 +61,7 @@ describe('When a body is provided in the event', () => {
   describe('And the authentication is successful', () => {
     let response: APIGatewayProxyStructuredResultV2;
     beforeEach(async () => {
-      spyAuthenticate.mockResolvedValue('jwtToken');
+      spyAuthenticate.mockResolvedValue('jwtTokenValue');
       response = await handler(event, baseContext);
     });
     afterEach(() => {
@@ -76,6 +76,12 @@ describe('When a body is provided in the event', () => {
       expect(response.body).toEqual(
         JSON.stringify({ username: 'test@testing.com' })
       );
+    });
+
+    it('should return jwt cookie', () => {
+      expect(response.cookies).toEqual([
+        'thom-auth=jwtTokenValue; Secure; HttpOnly'
+      ]);
     });
   });
 
