@@ -105,6 +105,10 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 resource "aws_apigatewayv2_api" "auth_api" {
   name          = "serverless_auth"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_headers = ["Access-Control-Allow-Credentials", "Set-Cookie"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "auth_stage" {

@@ -27,7 +27,7 @@ const login: Handler<
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Credentials': true,
-        Cookie: `jwtToken=${jwtToken}`
+        'Set-Cookie': `jwtToken=${jwtToken}`
       }
     };
   } catch (error) {

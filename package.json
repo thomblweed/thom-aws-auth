@@ -18,7 +18,7 @@
     "merge:packages": "package-json-merge package.json ./src/layers/nodejs/package.json > temp/package.json",
     "copy:esbuild": "cat esbuild.build.js >> temp/esbuild.build.js",
     "copy:lambdas": "cp -R ./src/login ./temp && find temp* -name '*.test.ts' -type f -delete",
-    "update:esbuild-local": "sed -i -e 's#src/login/login.ts#login/login.ts#g' temp/esbuild.build.js && sed -i -e 's#tsconfig.json#../tsconfig.json#g' temp/esbuild.build.js"
+    "update:esbuild-local": "sed -i -e 's#src/lambdas/login/login.ts#lambdas/login/login.ts#g' temp/esbuild.build.js && sed -i -e 's#tsconfig.json#../tsconfig.json#g' temp/esbuild.build.js"
   },
   "author": "Thomas Newman",
   "license": "ISC",
