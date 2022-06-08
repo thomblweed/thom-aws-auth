@@ -10,22 +10,20 @@
     "clean": "scripts/clean.sh",
     "apply:aws": "npm run build && cd terraform/aws && terraform plan -out=out.tfplan -var-file=secrets.tfvars && terraform apply \"out.tfplan\"",
     "destroy:aws": "cd terraform/aws && terraform destroy -auto-approve",
-    "apply:local": "npm run build && cd terraform/localstack && terraform init && terraform apply -auto-approve",
-    "update:local": "npm run create:local-lambdas && cd terraform/localstack && terraform apply -auto-approve",
+    "apply:local": "npm run build && cd terraform/localstack && terraform init && terraform plan -out=out.tfplan -var-file=secrets.tfvars && terraform apply \"out.tfplan\"",
     "destroy:local": "cd terraform/localstack && terraform destroy -auto-approve",
     "up": "cd terraform/docker && terraform init && terraform apply -auto-approve",
     "down": "cd terraform/docker && terraform destroy -auto-approve",
     "create:local-lambdas": "rm -rf temp && mkdir temp && npm run merge:packages && npm run copy:lambdas && npm run copy:esbuild && npm run update:esbuild-local && cd temp && npm i --omit=dev && npm run build",
     "merge:packages": "package-json-merge package.json ./src/layers/nodejs/package.json > temp/package.json",
     "copy:esbuild": "cat esbuild.build.js >> temp/esbuild.build.js",
-    "copy:lambdas": "cp -R ./src/login ./temp && find temp* -name '*.test.ts' -type f -delete",
-    "update:esbuild-local": "sed -i -e 's#src/login/login.ts#login/login.ts#g' temp/esbuild.build.js && sed -i -e 's#tsconfig.json#../tsconfig.json#g' temp/esbuild.build.js"
+    "copy:lambdas": "cp -R ./src/lambdas/* ./temp && find temp* -name '*.test.ts' -type f -delete",
+    "update:esbuild-local": "sed -i -e 's#src/lambdas/login/login.ts#lambdas/login/login.ts#g' temp/esbuild.build.js && sed -i -e 's#tsconfig.json#../tsconfig.json#g' temp/esbuild.build.js"
   },
   "author": "Thomas Newman",
   "license": "ISC",
   "dependencies": {
-    "amazon-cognito-identity-js": "^5.2.9",
-    "aws-sdk": "^2.1145.0"
+    "amazon-cognito-identity-js": "^5.2.9"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.97",

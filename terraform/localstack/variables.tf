@@ -9,3 +9,15 @@ variable "auth_bucket_name" {
   type        = string
   default     = "lambda-auth"
 }
+
+variable "user_pool_id" {
+  description = "User pool ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "client_id" {
+  description = "User pool client ID"
+  type        = string
+  sensitive   = true
+}

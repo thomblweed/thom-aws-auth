@@ -5,8 +5,15 @@ module "auth_bucket" {
 
 module "login_archive" {
   source           = "./modules/archive-file"
-  source_file      = "../../dist/login.js"
+  source_file      = "../../dist/login/login.js"
   output_path      = "../../dist/login.zip"
+  source_directory = null
+}
+
+module "logout_archive" {
+  source           = "./modules/archive-file"
+  source_file      = "../../dist/logout/logout.js"
+  output_path      = "../../dist/logout.zip"
   source_directory = null
 }
 
@@ -46,6 +53,16 @@ resource "aws_s3_object" "login_handler" {
   depends_on = [module.auth_bucket]
 }
 
+resource "aws_s3_object" "logout_handler" {
+  bucket = module.auth_bucket.s3_bucket_id
+
+  key    = "logout.zip"
+  source = module.logout_archive.output_path
+
+  etag       = filemd5(module.logout_archive.output_path)
+  depends_on = [module.auth_bucket]
+}
+
 # lambda functions
 resource "aws_lambda_function" "login" {
   function_name = "login"
@@ -72,8 +89,32 @@ resource "aws_lambda_function" "login" {
   }
 }
 
+resource "aws_lambda_function" "logout" {
+  function_name = "logout"
+
+  s3_bucket = module.auth_bucket.s3_bucket_id
+  s3_key    = aws_s3_object.logout_handler.key
+
+  runtime = var.node_runtime
+  handler = "logout.handler"
+
+  layers = [aws_lambda_layer_version.lambda_layer.arn]
+
+  source_code_hash = module.logout_archive.output_base64sha256
+
+  role = aws_iam_role.lambda_exec.arn
+
+  timeout = 8
+}
+
 resource "aws_cloudwatch_log_group" "login" {
   name = "/aws/lambda/${aws_lambda_function.login.function_name}"
+
+  retention_in_days = 14
+}
+
+resource "aws_cloudwatch_log_group" "logout" {
+  name = "/aws/lambda/${aws_lambda_function.logout.function_name}"
 
   retention_in_days = 14
 }
@@ -105,6 +146,10 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 resource "aws_apigatewayv2_api" "auth_api" {
   name          = "serverless_auth"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_headers = ["Access-Control-Allow-Credentials", "Set-Cookie"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "auth_stage" {
@@ -141,11 +186,27 @@ resource "aws_apigatewayv2_integration" "auth_integration" {
   payload_format_version = "2.0"
 }
 
+resource "aws_apigatewayv2_integration" "integration_logout" {
+  api_id = aws_apigatewayv2_api.auth_api.id
+
+  integration_uri        = aws_lambda_function.logout.invoke_arn
+  integration_type       = "AWS_PROXY"
+  integration_method     = "POST"
+  payload_format_version = "2.0"
+}
+
 resource "aws_apigatewayv2_route" "gateway_login_route" {
   api_id = aws_apigatewayv2_api.auth_api.id
 
   route_key = "POST /login"
   target    = "integrations/${aws_apigatewayv2_integration.auth_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "gateway_logout_route" {
+  api_id = aws_apigatewayv2_api.auth_api.id
+
+  route_key = "POST /logout"
+  target    = "integrations/${aws_apigatewayv2_integration.integration_logout.id}"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
@@ -158,6 +219,15 @@ resource "aws_lambda_permission" "api_gw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.login.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.auth_api.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "api_gw_logout" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.logout.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_apigatewayv2_api.auth_api.execution_arn}/*/*"
