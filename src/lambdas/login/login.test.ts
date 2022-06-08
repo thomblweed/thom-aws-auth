@@ -19,7 +19,7 @@ import { handler } from './login';
 
 const spyAuthenticate = vi.spyOn(CognitoService, 'authenticate');
 
-const baseEvent = {
+const baseEvent: APIGatewayProxyEventV2 = {
   version: '',
   routeKey: '',
   rawPath: '',
