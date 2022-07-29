@@ -13,7 +13,8 @@ const logout: Handler<
   statusCode: 200,
   body: JSON.stringify({}),
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   },
   cookies: ['thom-auth=null; Expires=Thu, 01 Jan 1970 00:00:00 GMT']
 });

@@ -17,8 +17,8 @@ Installations and setup of the following:
 ### Setup
 
 ```
-npm install
 npm run setup
+npm run build
 ```
 
 ### Run with Docker

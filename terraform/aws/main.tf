@@ -148,7 +148,8 @@ resource "aws_apigatewayv2_api" "auth_api" {
   protocol_type = "HTTP"
   cors_configuration {
     allow_origins = ["*"]
-    allow_headers = ["Access-Control-Allow-Credentials", "Set-Cookie"]
+    allow_headers = ["Accept", "Set-Cookie", "Content-Type", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers"]
+    allow_methods = ["GET", "POST", "OPTIONS"]
   }
 }
 

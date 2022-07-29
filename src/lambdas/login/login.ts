@@ -26,7 +26,7 @@ const login: Handler<
       body: JSON.stringify({ username }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Origin': '*'
       },
       cookies: [`thom-auth=${jwtToken}; Secure; HttpOnly`]
     };
@@ -35,7 +35,8 @@ const login: Handler<
     return {
       statusCode: 401,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     };
   }
