@@ -17,13 +17,13 @@ const login: Handler<
   APIGatewayProxyStructuredResultV2
 > = async (event): Promise<APIGatewayProxyStructuredResultV2> => {
   const { body } = event;
-  const { username, password } = body as unknown as Credentials;
+  const { email, password } = body as unknown as Credentials;
 
   try {
-    const jwtToken = await authenticate(username, password);
+    const jwtToken = await authenticate(email, password);
     return {
       statusCode: 200,
-      body: JSON.stringify({ username }),
+      body: JSON.stringify({ email }),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -31,7 +31,6 @@ const login: Handler<
       cookies: [`thom-auth=${jwtToken}; Secure; HttpOnly`]
     };
   } catch (error) {
-    console.error(error);
     return {
       statusCode: 401,
       headers: {

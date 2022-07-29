@@ -5,9 +5,9 @@ export const loginValidationSchema = {
     properties: {
       body: {
         type: 'object',
-        required: ['username', 'password'],
+        required: ['email', 'password'],
         properties: {
-          username: {
+          email: {
             type: 'string',
             minLength: 1
           },
