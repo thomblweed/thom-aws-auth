@@ -42,7 +42,7 @@ describe('When a body is provided in the event', () => {
   beforeEach(async () => {
     event = {
       body: JSON.stringify({
-        email: 'test@testing.com',
+        username: 'test@testing.com',
         password: 'password-test'
       }),
       ...baseEvent
@@ -65,7 +65,7 @@ describe('When a body is provided in the event', () => {
 
     it('should return correct body value as json', async () => {
       expect(response.body).toEqual(
-        JSON.stringify({ email: 'test@testing.com' })
+        JSON.stringify({ username: 'test@testing.com' })
       );
     });
 

@@ -17,13 +17,13 @@ const login: Handler<
   APIGatewayProxyStructuredResultV2
 > = async (event): Promise<APIGatewayProxyStructuredResultV2> => {
   const { body } = event;
-  const { email, password } = body as unknown as Credentials;
+  const { username, password } = body as unknown as Credentials;
 
   try {
-    const jwtToken = await authenticate(email, password);
+    const jwtToken = await authenticate(username, password);
     return {
       statusCode: 200,
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ username }),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
