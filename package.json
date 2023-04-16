@@ -9,7 +9,7 @@
     "coverage": "vitest run --coverage",
     "clean": "scripts/clean.sh",
     "apply:aws": "npm run build && cd terraform/aws && terraform plan -out=out.tfplan -var-file=secrets.tfvars && terraform apply \"out.tfplan\"",
-    "destroy:aws": "cd terraform/aws && terraform destroy -auto-approve",
+    "destroy:aws": "cd terraform/aws && terraform destroy -auto-approve -var-file=secrets.tfvars",
     "apply:local": "npm run build && cd terraform/localstack && terraform init && terraform plan -out=out.tfplan -var-file=secrets.tfvars && terraform apply \"out.tfplan\"",
     "destroy:local": "cd terraform/localstack && terraform destroy -auto-approve",
     "up": "cd terraform/docker && terraform init && terraform apply -auto-approve",
